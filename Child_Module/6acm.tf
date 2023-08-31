@@ -60,4 +60,3 @@ resource "aws_acm_certificate_validation" "acm_certificate_validation" {
   types       = ["AMAZON_ISSUED"]
   most_recent = true
   }*/
-

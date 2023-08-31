@@ -27,12 +27,12 @@ resource "aws_lb" "load_balancer" {
   internal           = var.load_balancer_internal
   load_balancer_type = var.load_balancer_type
   security_groups    = ["${aws_security_group.alb_sg.id}"]
-  /*subnets            = ["${aws_subnet.public_subnets.*.id}"]*/
+  # subnets            = ["${aws_subnet.public_subnets.*.id}"]
   subnets = aws_subnet.public_subnets.*.id
 
   enable_deletion_protection = var.enable_deletion_protection
   tags = {
-    Name = "${var.descriptor_b}-ALB"
+    Name = "${var.descriptor_b}-${var.env}-ALB"
     Environment = "${var.env}-environment"
   }
 }

@@ -1,7 +1,7 @@
 #0. Create ECS Autoscale Role
 
 resource "aws_iam_role" "ecs_autoscale_role" {
-  name = "${var.project_name}-ecsAutoscaleRole"
+  name = "${var.project_name}-${var.env}-ecsAutoscaleRole"
   
   assume_role_policy = <<EOF
 {

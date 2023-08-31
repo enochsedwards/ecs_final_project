@@ -3,10 +3,22 @@
 #1. Create Security Group (With Outbound Rule Attached) for ALB
 
 resource "aws_security_group" "alb_sg" {
-  name        = "ALB-${var.project_name}-SG"
+  name        = "ALB-${var.project_name}-${var.env}-SG"
   description = "Allow/Enable HTTP/HTTPS Access on Port 80/443 TLS inbound traffic Foe Application Load Balancer"
   vpc_id      = aws_vpc.vpc.id
 
+  dynamic "ingress" {
+    iterator = port
+    for_each = var.sg_ingress
+    content {
+    from_port = port.value
+    to_port = port.value
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    }
+  }
+
+/*
   ingress {
     description = "HTTP  Access -TLS from VPC"
     from_port   = 80
@@ -21,7 +33,7 @@ resource "aws_security_group" "alb_sg" {
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-  }
+  } */
 
   egress {
     from_port   = 0
@@ -31,13 +43,14 @@ resource "aws_security_group" "alb_sg" {
   }
 
   tags = {
-    Name = "ALB-${var.project_name_b}-SG"
+    Name = "ALB-${var.project_name_b}-${var.env}-SG"
     Environment = "${var.env}-environment"
   }
 }
 
+
 resource "aws_security_group" "ssh_sg" {
-  name        = "SSH-${var.project_name}-SG"
+  name        = "SSH-${var.project_name}-${var.env}-SG"
   description = "Allow/Enable SSH Access on Port 22 TLS inbound traffic"
   vpc_id      = aws_vpc.vpc.id
 
@@ -57,14 +70,14 @@ resource "aws_security_group" "ssh_sg" {
   }
 
   tags = {
-    Name = "SSH-${var.project_name_b}-SG"
+    Name = "SSH-${var.project_name_b}-${var.env}-SG"
     Environment = "${var.env}-environment"
   }
 }
 #1. Create Security Group (With Inb--Outbound Rule Attached) for Web server
 #Create Security Group Rule For Webserver/Container/ECS
 resource "aws_security_group" "web_server_sg" {
-  name        = "WEB-${var.project_name}-SG"
+  name        = "WEB-${var.project_name}-${var.env}-SG"
   description = "Allow/Enable HTTP/HTTPS Access on Port 80/443 via ALB and SSH on Port 22 via SSH SG"
   vpc_id      = aws_vpc.vpc.id
 
@@ -101,14 +114,14 @@ resource "aws_security_group" "web_server_sg" {
   }
 
   tags = {
-    Name = "WEB-${var.project_name_b}-SG"
+    Name = "WEB-${var.project_name_b}-${var.env}-SG"
     Environment = "${var.env}-environment"
   }
 }
 
 #Create Security Group Rule For RDS Database
 resource "aws_security_group" "database_sg" {
-  name        = "RDS-${var.project_name}-SG"
+  name        = "RDS-${var.project_name}-${var.env}-SG"
   description = "Enable PostgreSQL Access on Port 5432"
   vpc_id      = aws_vpc.vpc.id
 
@@ -128,7 +141,7 @@ resource "aws_security_group" "database_sg" {
   }
 
   tags = {
-    Name = "RDS-${var.project_name_b}-SG"
+    Name = "RDS-${var.project_name_b}-${var.env}-SG"
     Environment = "${var.env}-environment"
   }
 }

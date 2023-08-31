@@ -8,7 +8,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = var.enable_dns_hostnames
 
   tags = {
-    Name = "${var.project_name}-VPC"
+    Name = "${var.project_name}-${var.env}-VPC"
     Environment = "${var.env}-environment"
   }
 }
@@ -23,7 +23,7 @@ resource "aws_subnet" "public_subnets" {
   enable_resource_name_dns_a_record_on_launch = var.enable_resource_name_dns_a_record_on_launch
 
   tags = {
-    Name = "${var.descriptor_a}-Public-Subnet-${count.index + 1}"
+    Name = "${var.descriptor_a}-${var.env}-Public-Subnet-${count.index + 1}"
     Environment = "${var.env}-environment"
   }
 }
@@ -36,17 +36,17 @@ resource "aws_subnet" "private_subnets" {
   availability_zone = var.availability_zone_database[count.index]
 
   tags = {
-    Name = "${var.descriptor_b}-Private-Subnet-${count.index + 1}"
+    Name = "${var.descriptor_b}-${var.env}-Private-Subnet-${count.index + 1}"
     Environment = "${var.env}-environment"
   }
 }
 
 #3. Create Internet Gateway
-resource "aws_internet_gateway" "internet-gateway" {
+resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.vpc.id
 
   tags = {
-    Name = "${var.project_name_b}-Internet-Gateway"
+    Name = "${var.project_name_b}-${var.env}-Internet-Gateway"
     Environment = "${var.env}-environment"
   }
 }
@@ -55,67 +55,67 @@ resource "aws_internet_gateway" "internet-gateway" {
 resource "aws_eip" "elastic-iP" {
 
   tags = {
-    Name = "${var.project_name_b}-Elastic-iP"
+    Name = "${var.project_name_b}-${var.env}-Elastic-iP"
     Environment = "${var.env}-environment"
   }
 }
 
 #5. Create NAT Gateway
-resource "aws_nat_gateway" "nat-gateway" {
+resource "aws_nat_gateway" "nat_gateway" {
   allocation_id = aws_eip.elastic-iP.id
   subnet_id     = aws_subnet.public_subnets[0].id
   
 
 
   tags = {
-    Name = "${var.project_name_b}-Nat-Gateway"
+    Name = "${var.project_name_b}-${var.env}-Nat-Gateway"
     Environment = "${var.env}-environment"
   }
 
 }
 
 #4a.Create Public Route Table 
-resource "aws_route_table" "public-route-table" {
+resource "aws_route_table" "public_route_table" {
   vpc_id = aws_vpc.vpc.id
   #The command below attaches the pulic route table to the Internet gateway
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.internet-gateway.id
+    gateway_id = aws_internet_gateway.internet_gateway.id
   }
 
 
   tags = {
-    Name = "${var.project_name}-Public-Route-Table"
+    Name = "${var.project_name}-${var.env}-Public-Route-Table"
     Environment = "${var.env}-environment"
   }
 }
 
 #4b.Create priv Route Table 
-resource "aws_route_table" "private-route-table" {
+resource "aws_route_table" "private_route_table" {
   vpc_id = aws_vpc.vpc.id
   #The command below attaches the private route table to the NAT gateway
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.nat-gateway.id
+    gateway_id = aws_nat_gateway.nat_gateway.id
   }
 
   tags = {
-    Name = "${var.project_name}-Private-Route-Table"
+    Name = "${var.project_name}-${var.env}-Private-Route-Table"
     Environment = "${var.env}-environment"
   }
 }
 
 #5a. Attach public Route Table to public subnets
-resource "aws_route_table_association" "Attach-pub-route-table-pub-subnets" {
+resource "aws_route_table_association" "Attach_pub_route_table_pub_subnets" {
   count          = length(var.public_subnets_cidr)
   subnet_id      = aws_subnet.public_subnets[count.index].id
-  route_table_id = aws_route_table.public-route-table.id
+  route_table_id = aws_route_table.public_route_table.id
 }
 
 #5c. Attach private Route Table To private subnets
-resource "aws_route_table_association" "Attach-priv-route-table-priv-subnets" {
+resource "aws_route_table_association" "Attach_priv_route_table_priv_subnets" {
   count          = length(var.private_subnets_cidr)
   subnet_id      = aws_subnet.private_subnets[count.index].id
-  route_table_id = aws_route_table.private-route-table.id
+  route_table_id = aws_route_table.private_route_table.id
 }
 

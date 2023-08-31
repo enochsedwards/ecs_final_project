@@ -4,7 +4,7 @@ resource "aws_db_subnet_group" "database_subnet_group" {
   /*subnet_ids = [aws_subnet.private_subnets[0].id, aws_subnet.private_subnets[1].id]*/
   subnet_ids = aws_subnet.private_subnets.*.id
   tags = {
-    Name = "${var.project_name_b}-db_subnets"
+    Name = "${var.project_name_b}-${var.env}-db_subnets"
     Environment = "${var.env}-environment"
   }
 }

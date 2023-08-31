@@ -1,3 +1,4 @@
+
 output "vpc_id" {
   description = "RDS instance hostname"
   value       = aws_vpc.vpc.id
@@ -10,17 +11,17 @@ output "elastic-iP" {
 
 output "gateway_id" {
   description = "gateway id"
-  value       = aws_internet_gateway.internet-gateway.id
+  value       = aws_internet_gateway.internet_gateway.id
 }
 
 output "public_route_table_id" {
   description = "public_route_table id"
-  value       = aws_route_table.public-route-table.id
+  value       = aws_route_table.public_route_table.id
 }
 
 output "private_route_table_id" {
   description = "private_route_table id"
-  value       = aws_route_table.private-route-table.id
+  value       = aws_route_table.private_route_table.id
 }
 
 output "alb_sg" {

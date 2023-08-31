@@ -38,7 +38,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
   # create container definition
   container_definitions = jsonencode([
     {
-      name      = "${var.project_name_c}-container"
+      name      = "${var.project_name_c}-${var.env}-container"
       image     = "${var.container_image}"
       essential = true
 
@@ -71,7 +71,7 @@ resource "aws_ecs_task_definition" "ecs_task_definition" {
 
 # create ecs service
 resource "aws_ecs_service" "ecs_service" {
-  name                               = "${var.project_name_c}-service"
+  name                               = "${var.project_name_c}-${var.env}-service"
   launch_type                        = var.launch_type
   cluster                            = aws_ecs_cluster.ecs_cluster.id
   task_definition                    = aws_ecs_task_definition.ecs_task_definition.arn
@@ -96,7 +96,7 @@ resource "aws_ecs_service" "ecs_service" {
   # load balancing
   load_balancer {
     target_group_arn = aws_lb_target_group.techno_target_group.arn
-    container_name   = "${var.project_name_c}-container"
+    container_name   = "${var.project_name_c}-${var.env}-container"
     container_port   = 80
   }
 }

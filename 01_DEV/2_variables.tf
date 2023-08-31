@@ -52,7 +52,6 @@ variable "target_group_name" {}
 variable "target_group_type" {}
 variable "target_group_timeout" {}
 variable "health_check_path" {}
-
 variable "load_balancer_name" {}
 variable "load_balancer_internal" {}
 variable "load_balancer_type" {}
@@ -63,11 +62,6 @@ variable "alternative_name" {}
 #listeners
 #variable "certificate_arn" {}
 
-#s3 bucket
-#variable "" {}
-
-
-#ecs
 variable "log_group_name" {}
 variable "ecs_cluster_name" {}
 variable "ecs_family_name" {}
@@ -93,3 +87,8 @@ variable "container_image" {}
 #variable "containerPort" {}
 #variable "hostPort" {}
 variable "container_port" {}
+
+#dynamo db table
+#variable "dynamo_db_name" {}
+variable "write_capacity" {}
+variable "read_capacity" {}
