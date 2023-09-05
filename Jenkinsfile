@@ -14,9 +14,9 @@ pipeline {
                 script {
                     dir('S3_DynamoDB') {
                         // Deploy DynamoDB using Terraform
-                        sh 'terraform init'
+                        bat 'terraform init'
                         echo "Terraform action is --> ${action}"
-                        sh ("terraform ${action} -auto-approve")
+                        bat ("terraform ${action} -auto-approve")
                     }
                 }
             }
