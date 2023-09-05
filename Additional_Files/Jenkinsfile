@@ -16,20 +16,20 @@ pipeline {
                         // Deploy DynamoDB using Terraform
                         sh 'terraform init'
                         echo "Terraform action is --> ${action}"
-                        sh ("terraform ${action} --auto-approve")
+                        sh ("terraform ${action} -auto-approve")
                     }
                 }
             }
         }
 
-        stage('Deploy Parent Module') {
+        stage('Deploy 01_DEV') {
             steps {
                 script {
-                    dir('Parent Module') {
+                    dir('01_DEV') {
                         // Deploy to the Dev environment using Terraform
-                        sh 'terraform init'
+                        bat 'terraform init'
                         echo "Terraform action is --> ${action}"
-                        sh ("terraform ${action} --auto-approve -var-file=dev.tfvars")
+                        bat ("terraform ${action} -auto-approve -var-file=dev.tfvars")
                     }
                 }
             }
