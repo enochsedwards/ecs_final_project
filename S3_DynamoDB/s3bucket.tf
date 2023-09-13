@@ -1,6 +1,6 @@
 # create an s3 bucket 
 resource "aws_s3_bucket" "s3_backend" {
-  bucket = "techno-terraform-remote-state"
+  bucket = "youni-terraform-remote-state"
   force_destroy = true
 
   lifecycle {
@@ -9,14 +9,14 @@ resource "aws_s3_bucket" "s3_backend" {
 }
 
 resource "aws_s3_bucket_versioning" "s3_bucket_version" {
-  bucket = "techno-terraform-remote-state"
+  bucket = "youni-terraform-remote-state"
   versioning_configuration {
     status = "Enabled"
   } 
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "s3_encryption_config" {
-  bucket = "techno-terraform-remote-state"
+  bucket = "youni-terraform-remote-state"
   
   rule {
     apply_server_side_encryption_by_default {

@@ -1,14 +1,15 @@
 variable "project_name" {
-    default = "Technodemics"
+    default = "technodemics"
 }
 
 #dynamo db
-variable "dynamo_db_name" {
+/*variable "dynamo_db_name" {
     default = "techno-state-lock"
-}
+}*/
+
 variable "write_capacity" {
-    default = "5"
+    default = "20"
 }
 variable "read_capacity" {
-    default = "5"
+    default = "20"
 }
